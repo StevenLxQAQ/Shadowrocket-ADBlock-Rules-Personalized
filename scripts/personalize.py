@@ -15,6 +15,15 @@ def remove_rule(text: str, kind: str, value: str, policy: str) -> str:
     return re.sub(pattern, "", text)
 
 
+def set_general_option(text: str, name: str, value: str) -> str:
+    pattern = rf"(?im)^{re.escape(name)}\s*=.*$"
+    replacement = f"{name} = {value}"
+    updated, count = re.subn(pattern, replacement, text, count=1)
+    if count != 1:
+        raise SystemExit(f"Missing [General] option: {name}")
+    return updated
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=Path, required=True)
@@ -22,6 +31,9 @@ def main() -> None:
     args = parser.parse_args()
     config = json.loads(args.config.read_text(encoding="utf-8"))
     rules = args.rules.read_text(encoding="utf-8")
+
+    for name, value in config.get("general_overrides", {}).items():
+        rules = set_general_option(rules, name, value)
 
     rules = re.sub(rf"(?ms)^{re.escape(START)}\r?\n.*?^{re.escape(END)}\r?\n?", "", rules)
     for domain in config["direct"]:

@@ -11,6 +11,9 @@
     "gspe19-cn.ls-apple.com.akadns.net"
   ],
   "proxy": ["push.apple.com"],
+  "general_overrides": {
+    "dns-server": "system"
+  },
   "reject_drop": [
     { "kind": "DOMAIN-SUFFIX", "value": "tthr.apple.com" },
     { "kind": "DOMAIN", "value": "tether.edge.apple" }
