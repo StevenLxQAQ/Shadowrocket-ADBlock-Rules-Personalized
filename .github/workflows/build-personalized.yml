@@ -1,0 +1,53 @@
+name: Build personalized Shadowrocket rules
+
+on:
+  schedule:
+    # Sunday 10:00 Asia/Shanghai (02:00 UTC)
+    - cron: "0 2 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-personalized
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out automation controls
+        uses: actions/checkout@v4
+        with:
+          ref: release
+          path: control
+
+      - name: Clone upstream build source
+        run: git clone --depth 1 --branch build https://github.com/Johnshall/Shadowrocket-ADBlock-Rules-Forever.git source
+
+      - name: Apply personal rules and build
+        run: |
+          mkdir -p source/custom source/scripts
+          cp control/custom/apple_rules.json source/custom/apple_rules.json
+          cp control/scripts/personalize.py source/scripts/personalize.py
+          python3 -m pip install --requirement source/requirements.txt
+          cd source
+          ./factory/auto_build.sh
+          python3 scripts/personalize.py --config custom/apple_rules.json --rules sr_top500_banlist_ad.conf
+          curl --fail --location --output lazy.conf https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy.conf
+          curl --fail --location --output lazy_group.conf https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy_group.conf
+
+      - name: Publish personalized branch
+        env:
+          REPOSITORY: ${{ github.repository }}
+          TOKEN: ${{ github.token }}
+        run: |
+          cd source
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan personalized
+          git add --all
+          git commit --message "Personalized build"
+          git remote add fork "https://x-access-token:${TOKEN}@github.com/${REPOSITORY}.git"
+          git push --force fork HEAD:personalized

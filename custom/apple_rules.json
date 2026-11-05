@@ -1,0 +1,24 @@
+{
+  "direct": [
+    "weatherkit.apple.com",
+    "weather-data.apple.com",
+    "weather-data.apple.com.akadns.net",
+    "weather-map.apple.com",
+    "weather-map2.apple.com",
+    "cdn.apple-mapkit.com",
+    "gs-loc.apple.com",
+    "gs-loc-cn.apple.com",
+    "gspe19-cn.ls-apple.com.akadns.net"
+  ],
+  "proxy": ["push.apple.com"],
+  "reject_drop": [
+    { "kind": "DOMAIN-SUFFIX", "value": "tthr.apple.com" },
+    { "kind": "DOMAIN", "value": "tether.edge.apple" }
+  ],
+  "remove_conflicting_proxy": [
+    "cdn.apple-mapkit.com",
+    "gs-loc.apple.com",
+    "gs-loc-cn.apple.com",
+    "gspe19-cn.ls-apple.com.akadns.net"
+  ]
+}
