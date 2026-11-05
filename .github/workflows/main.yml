@@ -1,0 +1,41 @@
+name: Build Shadowrocket Rules
+
+on:
+  schedule:
+    # 每日8时开始
+    - cron:  '0 23 * * *'
+  
+  push:
+    branches:
+      - build
+    paths-ignore: 
+      - '**.md'
+      - 'LICENSE'
+
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install requirements
+        run: pip3 install -r requirements.txt
+
+      - name: Run auto-build.sh
+        run: ./factory/auto_build.sh
+      
+      - name: Update lazy rules
+        run: |
+          rm lazy.conf lazy_group.conf
+          curl -O https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy.conf
+          curl -O https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy_group.conf
+        
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          BRANCH: build
+          FOLDER: .
+          commit-message : 'Nightly build'
+          

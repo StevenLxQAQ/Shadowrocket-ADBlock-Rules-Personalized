@@ -1,0 +1,15 @@
+#
+# 黑名单中包含了 GFWList 中定义的无法访问的网站，剩下的网站直连。
+# 包含广告过滤
+#
+
+
+{{manual_proxy}}
+{{manual_reject}}
+
+{{ad}}
+{{gfwlist}}
+
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/AppleNews/AppleNews.list,PROXY
+
+FINAL,direct

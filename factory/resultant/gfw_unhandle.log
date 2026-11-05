@@ -1,0 +1,8 @@
+cdn*.i-scmp.com
+cdn*.search.xxx
+/^https?:\/\/[^\/]+blogspot\.(.*)
+fbcdn*.akamaihd.net
+boxun*.azurewebsites.net
+ss*.4sqi.net
+img*.picturedip.com
+hum*.uchicago.edu/faculty/ywang/history

@@ -1,0 +1,9 @@
+
+[URL Rewrite]
+^https?://(www.)?(g|google)\.cn https://www.google.com 302
+
+
+[MITM]
+hostname = *.google.cn,*.googlevideo.com
+
+# Made with Love from https://github.com/Johnshall/Shadowrocket-ADBlock-Rules-Forever
